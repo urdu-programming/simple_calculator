@@ -1,6 +1,4 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 void main() {
   runApp(MyApp());
@@ -36,8 +34,10 @@ class _CalculatorState extends State<Calculator> {
   late double number1;
   late double number2;
   var number = TextEditingController();
+  late String textBeforeCursor;
+  late String textAfterCursor;
   bool symbol = false;
-
+  late int cursorPosition;
   void setText(String num) {
     setState(() {
       number.text += num;
@@ -94,14 +94,14 @@ class _CalculatorState extends State<Calculator> {
                                   setText('7');
                                 }
                                 else {
-                                  String textBeforeCursor = number.text
+                                  textBeforeCursor = number.text
                                       .substring(
                                       0, number.selection.baseOffset);
                                   String textAfterCursor = number.text
                                       .substring(number.selection.extentOffset);
                                   number.text =
                                       textBeforeCursor + '7' + textAfterCursor;
-                                  int cursorPosition = textBeforeCursor.length +
+                                  cursorPosition = textBeforeCursor.length +
                                       1;
                                   number.selection = TextSelection.collapsed(
                                       offset: cursorPosition);
@@ -161,10 +161,7 @@ class _CalculatorState extends State<Calculator> {
                                 }
                                 symbol = false;
                                 myFocusNode.requestFocus();
-                                number.selection = TextSelection(
-                                  baseOffset: number.text.length,
-                                  extentOffset: number.text.length,
-                                );
+
                               },
                               child: Text("1",
                                   style: TextStyle(
@@ -172,31 +169,23 @@ class _CalculatorState extends State<Calculator> {
                       Expanded(
                           child: TextButton(
                               onPressed: () {
-                                if (!symbol) {
-                                  setText('%');
-                                }
-                                if(number.text == ""){
-                                  setText('%');
-                                }
-                                else {
+                                if(number.text != "") {
                                   String textBeforeCursor = number.text
                                       .substring(
                                       0, number.selection.baseOffset);
                                   String textAfterCursor = number.text
                                       .substring(number.selection.extentOffset);
-                                  number.text =
-                                      textBeforeCursor + '%' + textAfterCursor;
-                                  int cursorPosition = textBeforeCursor.length +
-                                      1;
-                                  number.selection = TextSelection.collapsed(
-                                      offset: cursorPosition);
-                                }
+                                    number.text =
+                                        textBeforeCursor + '%' +
+                                            textAfterCursor;
+                                    cursorPosition = textBeforeCursor.length +
+                                        1;
+                                    number.selection = TextSelection.collapsed(
+                                        offset: cursorPosition);
+                                  }
                                 symbol = true;
                                 myFocusNode.requestFocus();
-                                number.selection = TextSelection(
-                                  baseOffset: number.text.length,
-                                  extentOffset: number.text.length,
-                                );
+
                               },
                               child: Text(
                                 "%",
