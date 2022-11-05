@@ -144,19 +144,7 @@ class _CalculatorState extends State<Calculator> {
                       Expanded(
                           child: TextButton(
                               onPressed: () {
-                                if (number.text != '') {
-                                  textBeforeCursor = number.text.substring(
-                                      0, number.selection.baseOffset);
-                                  textAfterCursor = number.text
-                                      .substring(number.selection.extentOffset);
-                                  number.text =
-                                      textBeforeCursor + '÷' + textAfterCursor;
-                                  cursorPosition = textBeforeCursor.length + 1;
-                                  number.selection = TextSelection.collapsed(
-                                      offset: cursorPosition);
-                                }
-                                symbol = true;
-                                myFocusNode.requestFocus();
+                                setSymbol("÷");
                               },
                               child: Text("÷",
                                   style: TextStyle(
@@ -203,16 +191,7 @@ class _CalculatorState extends State<Calculator> {
                       Expanded(
                           child: TextButton(
                               onPressed: () {
-                                if (!symbol) {
-                                  setText('×');
-                                }
-                                symbol = true;
-                                myFocusNode.requestFocus();
-                                number.selection = TextSelection(
-                                  baseOffset: number.text.length,
-                                  extentOffset: number.text.length,
-                                  isDirectional: true,
-                                );
+                                setSymbol('×');
                               },
                               child: Text("×",
                                   style: TextStyle(
@@ -245,13 +224,31 @@ class _CalculatorState extends State<Calculator> {
                       Expanded(
                           child: TextButton(
                               onPressed: () {
+                                textBeforeCursor = number.text.substring(0, number.selection.baseOffset);
                                 if (!searchFunction(number.text, '.')) {
-                                  if (number.text != "") {
+                                  if (number.text != "" && textBeforeCursor[textBeforeCursor.length - 1] != '÷' &&
+                                  textBeforeCursor[textBeforeCursor.length - 1] != '×' &&
+                                  textBeforeCursor[textBeforeCursor.length - 1] != '–' &&
+                                  textBeforeCursor[textBeforeCursor.length - 1] != '+') {
                                     textBeforeCursor = number.text.substring(
                                         0, number.selection.baseOffset);
                                     String textAfterCursor = number.text
                                         .substring(
                                             number.selection.extentOffset);
+                                    number.text = textBeforeCursor +
+                                        '.' +
+                                        textAfterCursor;
+                                    cursorPosition =
+                                        textBeforeCursor.length + 1;
+                                    number.selection = TextSelection.collapsed(
+                                        offset: cursorPosition);
+                                  }
+                                  else{
+                                    textBeforeCursor = number.text.substring(
+                                        0, number.selection.baseOffset) + '0';
+                                    String textAfterCursor = number.text
+                                        .substring(
+                                        number.selection.extentOffset);
                                     number.text = textBeforeCursor +
                                         '.' +
                                         textAfterCursor;
@@ -277,19 +274,21 @@ class _CalculatorState extends State<Calculator> {
                       Expanded(
                         child: TextButton(
                             onPressed: () {
-                              String textBeforeCursor = number.text.substring(0, number.selection.baseOffset);
+                              String textBeforeCursor = number.text
+                                  .substring(0, number.selection.baseOffset);
                               cursorPosition = number.selection.baseOffset;
-                              number.selection = TextSelection.collapsed(offset: cursorPosition);
-                              print(textBeforeCursor);
+                              number.selection = TextSelection.collapsed(
+                                  offset: cursorPosition);
                               if (number.text != "" && textBeforeCursor != "") {
-                                print('by');
                                 cursorPosition = cursorPosition - 1;
-                                String textAfterCursor =
-                                number.text.substring(number.selection.extentOffset);
-                                number.text = number.text
-                                    .substring(0, cursorPosition) + textAfterCursor;
-                                print('by');
-                                number.selection = TextSelection.collapsed(offset: cursorPosition);
+                                String textAfterCursor = number.text
+                                    .substring(number.selection.extentOffset);
+                                number.text =
+                                    number.text.substring(0, cursorPosition) +
+                                        textAfterCursor;
+
+                                number.selection = TextSelection.collapsed(
+                                    offset: cursorPosition);
                                 myFocusNode.requestFocus();
                               }
                               myFocusNode.requestFocus();
@@ -305,14 +304,25 @@ class _CalculatorState extends State<Calculator> {
                       Expanded(
                         child: TextButton(
                             onPressed: () {
-                              if (!symbol) {
-                                setText("–");
-                              }
+                                textBeforeCursor = number.text
+                                    .substring(0, number.selection.baseOffset);
+                                if (textBeforeCursor[
+                                            textBeforeCursor.length - 1] ==
+                                        '–' ||
+                                    textBeforeCursor[
+                                            textBeforeCursor.length - 1] ==
+                                        '+') {
+                                  textBeforeCursor = textBeforeCursor.substring(
+                                      0, textBeforeCursor.length - 1);
+                                }
+                                textAfterCursor = number.text
+                                    .substring(number.selection.extentOffset);
+                                number.text =
+                                    textBeforeCursor + '–' + textAfterCursor;
+                                cursorPosition = textBeforeCursor.length + 1;
+                                number.selection = TextSelection.collapsed(
+                                    offset: cursorPosition);
                               myFocusNode.requestFocus();
-                              number.selection = TextSelection(
-                                baseOffset: number.text.length,
-                                extentOffset: number.text.length,
-                              );
                             },
                             child: Text("–",
                                 style: TextStyle(
@@ -322,14 +332,7 @@ class _CalculatorState extends State<Calculator> {
                       Expanded(
                         child: TextButton(
                             onPressed: () {
-                              if (!symbol) {
-                                setText("+");
-                              }
-                              myFocusNode.requestFocus();
-                              number.selection = TextSelection(
-                                baseOffset: number.text.length,
-                                extentOffset: number.text.length,
-                              );
+                              setSymbol('+');
                             },
                             child: Text("+",
                                 style: TextStyle(
@@ -389,6 +392,31 @@ class _CalculatorState extends State<Calculator> {
       textBeforeCursor = number.text.substring(0, number.selection.baseOffset);
       String textAfterCursor =
           number.text.substring(number.selection.extentOffset);
+      number.text = textBeforeCursor + s + textAfterCursor;
+      cursorPosition = textBeforeCursor.length + 1;
+      number.selection = TextSelection.collapsed(offset: cursorPosition);
+    }
+    myFocusNode.requestFocus();
+  }
+
+  void setSymbol(String s) {
+    if (number.text != '') {
+      textBeforeCursor = number.text.substring(0, number.selection.baseOffset);
+      if (textBeforeCursor[textBeforeCursor.length - 1] == '÷' ||
+          textBeforeCursor[textBeforeCursor.length - 1] == '×' ||
+          textBeforeCursor[textBeforeCursor.length - 1] == '–' ||
+          textBeforeCursor[textBeforeCursor.length - 1] == '+') {
+        textBeforeCursor =
+            textBeforeCursor.substring(0, textBeforeCursor.length - 1);
+      }
+      if(textBeforeCursor[textBeforeCursor.length - 1] == '÷' ||
+          textBeforeCursor[textBeforeCursor.length - 1] == '×' ||
+          textBeforeCursor[textBeforeCursor.length - 1] == '–' ||
+          textBeforeCursor[textBeforeCursor.length - 1] == '+'){
+        textBeforeCursor =
+            textBeforeCursor.substring(0, textBeforeCursor.length - 1);
+      }
+      textAfterCursor = number.text.substring(number.selection.extentOffset);
       number.text = textBeforeCursor + s + textAfterCursor;
       cursorPosition = textBeforeCursor.length + 1;
       number.selection = TextSelection.collapsed(offset: cursorPosition);
