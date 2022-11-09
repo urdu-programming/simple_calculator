@@ -191,7 +191,9 @@ class _CalculatorState extends State<Calculator> {
             padding: const EdgeInsets.all(8.0),
             child: TextButton(
                 onPressed: () {
+                  number.text = answer;
                   setAnswer();
+                  myFocusNode.requestFocus();
                 },
                 style: TextButton.styleFrom(
                   foregroundColor: Colors.white,
@@ -396,6 +398,9 @@ class _CalculatorState extends State<Calculator> {
       setState(() {
         if(searchFunction(expression, '+') || searchFunction(expression, '-') || searchFunction(expression, '*') || searchFunction(expression, '/') || searchFunction(expression,'/100')){
           answer = '${exp.evaluate(EvaluationType.REAL, cm)}';
+        }
+        else{
+          answer = '';
         }
       });
     } catch (e) {
