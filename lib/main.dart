@@ -14,11 +14,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: "Simple Calculator",
       theme: ThemeData(primarySwatch: Colors.purple),
-      home: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.black87,
-        ),
-        body: const Calculator(),
+      home: const Scaffold(
+        body: Calculator(),
       ),
     );
   }
@@ -47,192 +44,154 @@ class _CalculatorState extends State<Calculator> {
 
   FocusNode myFocusNode = FocusNode();
 
-  Widget buildButton(String buttonText, String buttonType){
-    if(buttonType == 'number'){
+  Widget buildButton(String buttonText, String buttonType) {
+    if (buttonType == 'number') {
       return Expanded(
           child: TextButton(
               onPressed: () {
                 set(buttonText);
+                setAnswer();
               },
               child: Text(
                 buttonText,
-                style: const TextStyle(
-                    fontSize: 35, color: Colors.white),
+                style: const TextStyle(fontSize: 35, color: Colors.white),
               )));
-    }
-    else if(buttonType == 'point'){
+    } else if (buttonType == 'point') {
       return Expanded(
           child: TextButton(
               onPressed: () {
-                textBeforeCursor = number.text
-                    .substring(0, number.selection.baseOffset);
+                textBeforeCursor =
+                    number.text.substring(0, number.selection.baseOffset);
                 if (!searchFunction(number.text, '.')) {
                   if (number.text != "" &&
-                      textBeforeCursor[
-                      textBeforeCursor.length - 1] !=
-                          '÷' &&
-                      textBeforeCursor[
-                      textBeforeCursor.length - 1] !=
-                          '×' &&
-                      textBeforeCursor[
-                      textBeforeCursor.length - 1] !=
-                          '–' &&
-                      textBeforeCursor[
-                      textBeforeCursor.length - 1] !=
-                          '+') {
-                    textBeforeCursor = number.text.substring(
-                        0, number.selection.baseOffset);
-                    String textAfterCursor = number.text
-                        .substring(
-                        number.selection.extentOffset);
+                      textBeforeCursor[textBeforeCursor.length - 1] != '÷' &&
+                      textBeforeCursor[textBeforeCursor.length - 1] != '×' &&
+                      textBeforeCursor[textBeforeCursor.length - 1] != '–' &&
+                      textBeforeCursor[textBeforeCursor.length - 1] != '+') {
+                    textBeforeCursor =
+                        number.text.substring(0, number.selection.baseOffset);
+                    String textAfterCursor =
+                        number.text.substring(number.selection.extentOffset);
                     number.text = '$textBeforeCursor.$textAfterCursor';
-                    cursorPosition =
-                        textBeforeCursor.length + 1;
-                    number.selection = TextSelection.collapsed(
-                        offset: cursorPosition);
+                    cursorPosition = textBeforeCursor.length + 1;
+                    number.selection =
+                        TextSelection.collapsed(offset: cursorPosition);
                   } else {
-                    textBeforeCursor = '${number.text.substring(
-                        0, number.selection.baseOffset)}0';
-                    String textAfterCursor = number.text
-                        .substring(
-                        number.selection.extentOffset);
+                    textBeforeCursor =
+                        '${number.text.substring(0, number.selection.baseOffset)}0';
+                    String textAfterCursor =
+                        number.text.substring(number.selection.extentOffset);
                     number.text = '$textBeforeCursor.$textAfterCursor';
-                    cursorPosition =
-                        textBeforeCursor.length + 1;
-                    number.selection = TextSelection.collapsed(
-                        offset: cursorPosition);
+                    cursorPosition = textBeforeCursor.length + 1;
+                    number.selection =
+                        TextSelection.collapsed(offset: cursorPosition);
                   }
                   myFocusNode.requestFocus();
                 }
+                setAnswer();
                 myFocusNode.requestFocus();
               },
               child: const Text(".",
-                  style: TextStyle(
-                      fontSize: 35, color: Colors.white))));
-    }
-    else if(buttonType == 'operation'){
-      if(buttonText == '%'){
+                  style: TextStyle(fontSize: 35, color: Colors.white))));
+    } else if (buttonType == 'operation') {
+      if (buttonText == '%') {
         return Expanded(
             child: TextButton(
                 onPressed: () {
                   if (number.text != "") {
-                    textBeforeCursor = number.text.substring(
-                        0, number.selection.baseOffset);
-                    textAfterCursor = number.text
-                        .substring(number.selection.extentOffset);
-                    number.text =
-                        '$textBeforeCursor%$textAfterCursor';
+                    textBeforeCursor =
+                        number.text.substring(0, number.selection.baseOffset);
+                    textAfterCursor =
+                        number.text.substring(number.selection.extentOffset);
+                    number.text = '$textBeforeCursor%$textAfterCursor';
                     cursorPosition = textBeforeCursor.length + 1;
-                    number.selection = TextSelection.collapsed(
-                        offset: cursorPosition);
+                    number.selection =
+                        TextSelection.collapsed(offset: cursorPosition);
                     myFocusNode.requestFocus();
                   }
+                  setAnswer();
                 },
                 child: const Text(
                   "%",
-                  style: TextStyle(
-                      fontSize: 35, color: Colors.white),
+                  style: TextStyle(fontSize: 35, color: Colors.white),
                 )));
-      }
-      else if(buttonText == "-"){
+      } else if (buttonText == "-") {
         return Expanded(
           child: TextButton(
               onPressed: () {
                 if (number.text != "") {
-                  textBeforeCursor = number.text
-                      .substring(0, number.selection.baseOffset);
-                  if (textBeforeCursor[
-                  textBeforeCursor.length - 1] ==
-                      '–' ||
-                      textBeforeCursor[
-                      textBeforeCursor.length - 1] ==
-                          '+') {
+                  textBeforeCursor =
+                      number.text.substring(0, number.selection.baseOffset);
+                  if (textBeforeCursor[textBeforeCursor.length - 1] == '–' ||
+                      textBeforeCursor[textBeforeCursor.length - 1] == '+') {
                     textBeforeCursor = textBeforeCursor.substring(
                         0, textBeforeCursor.length - 1);
                   }
-                  textAfterCursor = number.text
-                      .substring(number.selection.extentOffset);
-                  number.text =
-                      '$textBeforeCursor–$textAfterCursor';
+                  textAfterCursor =
+                      number.text.substring(number.selection.extentOffset);
+                  number.text = '$textBeforeCursor–$textAfterCursor';
                   cursorPosition = textBeforeCursor.length + 1;
-                  number.selection = TextSelection.collapsed(
-                      offset: cursorPosition);
+                  number.selection =
+                      TextSelection.collapsed(offset: cursorPosition);
                   myFocusNode.requestFocus();
                 } else {
                   cursorPosition = 1;
                   setText("–");
                   myFocusNode.requestFocus();
-                  number.selection = TextSelection.collapsed(
-                      offset: cursorPosition);
+                  number.selection =
+                      TextSelection.collapsed(offset: cursorPosition);
                   myFocusNode.requestFocus();
                 }
+                setAnswer();
               },
               child: const Text("–",
                   style: TextStyle(
                     fontSize: 35,
                   ))),
         );
-      }
-      else if(buttonText == '⌫'){
-        return                       Expanded(
+      } else if (buttonText == '⌫') {
+        return Expanded(
           child: TextButton(
               onPressed: () {
                 if (number.text.isNotEmpty) {
-                  String textBeforeCursor = number.text
-                      .substring(0, number.selection.baseOffset);
+                  String textBeforeCursor =
+                      number.text.substring(0, number.selection.baseOffset);
                   cursorPosition = number.selection.baseOffset;
-                  number.selection = TextSelection.collapsed(
-                      offset: cursorPosition);
+                  number.selection =
+                      TextSelection.collapsed(offset: cursorPosition);
                   myFocusNode.requestFocus();
-                  if (number.text != "" &&
-                      textBeforeCursor != "") {
+                  if (number.text != "" && textBeforeCursor != "") {
                     cursorPosition = cursorPosition - 1;
-                    String textAfterCursor = number.text
-                        .substring(number.selection.extentOffset);
-                    number.text =
-                        number.text.substring(0, cursorPosition) +
-                            textAfterCursor;
-
-                    number.selection = TextSelection.collapsed(
-                        offset: cursorPosition);
+                    String textAfterCursor =
+                        number.text.substring(number.selection.extentOffset);
+                    number.text = number.text.substring(0, cursorPosition) +
+                        textAfterCursor;
+                    number.selection =
+                        TextSelection.collapsed(offset: cursorPosition);
                     myFocusNode.requestFocus();
                   }
                 }
+
+                setAnswer();
                 myFocusNode.requestFocus();
               },
               onLongPress: () {
                 number.text = "";
+                setState(() {answer = '';});
               },
               child: const Text("⌫",
                   style: TextStyle(
                     fontSize: 30,
                   ))),
         );
-      }
-      else if(buttonText == '='){
+      } else if (buttonText == '=') {
         return SizedBox(
           height: 130,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextButton(
                 onPressed: () {
-                  expression = number.text;
-                  expression = expression.replaceAll('×', '*');
-                  expression = expression.replaceAll('÷', '/');
-                  expression = expression.replaceAll('–', '-');
-                  expression = expression.replaceAll('%', '/100');
-                  try{
-                    Parser p = Parser();
-                    Expression exp = p.parse(expression);
-                    ContextModel cm = ContextModel();
-                    setState(() {
-                      answer = '${exp.evaluate(EvaluationType.REAL, cm)}';
-                    });
-                  }catch(e){
-                    setState(() {
-                      answer = 'Error';
-                    });
-                  }
+                  setAnswer();
                 },
                 style: TextButton.styleFrom(
                   foregroundColor: Colors.white,
@@ -248,8 +207,7 @@ class _CalculatorState extends State<Calculator> {
                 )),
           ),
         );
-      }
-      else{
+      } else {
         return Expanded(
             child: TextButton(
                 onPressed: () {
@@ -265,18 +223,22 @@ class _CalculatorState extends State<Calculator> {
     }
     return Expanded(
         child: TextButton(
-          onPressed: () {
-            myFocusNode.requestFocus();
-            number.text = "";
-          },
-          child: Text(
-            buttonText,
-            style: const TextStyle(
-              fontSize: 35,
-            ),
-          ),
-        ));
+      onPressed: () {
+        myFocusNode.requestFocus();
+        number.text = "";
+        setState(() {
+          answer = '';
+        });
+      },
+      child: Text(
+        buttonText,
+        style: const TextStyle(
+          fontSize: 35,
+        ),
+      ),
+    ));
   }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -284,22 +246,29 @@ class _CalculatorState extends State<Calculator> {
         Expanded(
           child: Container(
             color: Colors.black87,
-            alignment: Alignment.center,
             child: Column(
               children: [
-                TextField(
-                  keyboardType: TextInputType.none,
-                  textAlign: TextAlign.right,
-                  controller: number,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(borderSide: BorderSide.none),
+                Container(
+                  margin: const EdgeInsets.only(top: 150),
+                  child: TextField(
+                    keyboardType: TextInputType.none,
+                    textAlign: TextAlign.right,
+                    controller: number,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(borderSide: BorderSide.none),
+                    ),
+                    style: const TextStyle(fontSize: 70, color: Colors.white),
+                    focusNode: myFocusNode,
                   ),
-                  style: const TextStyle(fontSize: 70, color: Colors.white),
-                  focusNode: myFocusNode,
                 ),
-                Text(
-                  answer,
-                  style: const TextStyle(fontSize: 70, color: Colors.white),
+                Container(
+                  padding: const EdgeInsets.only(right: 10),
+                  width: MediaQuery.of(context).size.width,
+                  child: Text(
+                    answer,
+                    textAlign: TextAlign.right,
+                    style: const TextStyle(fontSize: 40, color: Colors.grey),
+                  ),
                 )
               ],
             ),
@@ -412,5 +381,25 @@ class _CalculatorState extends State<Calculator> {
       number.selection = TextSelection.collapsed(offset: cursorPosition);
     }
     myFocusNode.requestFocus();
+  }
+
+  void setAnswer() {
+    expression = number.text;
+    expression = expression.replaceAll('×', '*');
+    expression = expression.replaceAll('÷', '/');
+    expression = expression.replaceAll('–', '-');
+    expression = expression.replaceAll('%', '/100');
+    try {
+      Parser p = Parser();
+      Expression exp = p.parse(expression);
+      ContextModel cm = ContextModel();
+      setState(() {
+        if(searchFunction(expression, '+') || searchFunction(expression, '-') || searchFunction(expression, '*') || searchFunction(expression, '/') || searchFunction(expression,'/100')){
+          answer = '${exp.evaluate(EvaluationType.REAL, cm)}';
+        }
+      });
+    } catch (e) {
+      setState(() {answer = '';});
+    }
   }
 }
