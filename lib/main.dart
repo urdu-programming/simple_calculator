@@ -146,7 +146,7 @@ class _CalculatorState extends State<Calculator> {
               },
               child: const Text("–",
                   style: TextStyle(
-                    fontSize: 35,
+                    fontSize: 45,
                   ))),
         );
       } else if (buttonText == '⌫') {
