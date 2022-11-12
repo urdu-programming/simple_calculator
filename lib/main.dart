@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: "Simple Calculator",
-      theme: ThemeData(primarySwatch: Colors.purple),
+      theme: ThemeData(primarySwatch: Colors.deepPurple),
       home: const Scaffold(
         body: Calculator(),
       ),
@@ -34,7 +34,7 @@ class _CalculatorState extends State<Calculator> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: const [
+      children: [
         ScreenWidget(),
         ButtonWidget()
       ],

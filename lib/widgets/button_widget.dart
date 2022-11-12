@@ -9,7 +9,7 @@ class ButtonWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: Container(
-        color: Colors.black87,
+        color: const Color(0xff3c4258),
         child: Row(children: [
           Expanded(
             child: Column(
@@ -48,7 +48,7 @@ class ButtonWidget extends StatelessWidget {
             child: Column(
               children: [
                 buildButton('⌫', 'operation'),
-                buildButton('-', 'operation'),
+                buildButton('–', 'operation'),
                 buildButton('+', 'operation'),
                 buildButton('=', 'operation'),
               ],

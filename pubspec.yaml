@@ -39,10 +39,10 @@ dependencies:
   math_expressions: ^2.3.1
   flutter_launcher_icons: ^0.10.0
   flutter_native_splash: ^2.2.14
-
+  auto_size_text_field: ^2.1.0
 flutter_native_splash:
   image: assets/logo/calculator.png
-  color: "#42a5f5"
+  color: "#373d51"
 
 flutter_icons:
     android: true

@@ -15,14 +15,15 @@ Widget buildButton(String buttonText, String buttonType) {
             onPressed: () async {
               set(buttonText);
               setAnswer();
-              await Future.delayed(Duration(milliseconds: 0));
-              ScreenWidget.scrollController.value.jumpTo(
-                  ScreenWidget.scrollController.value.position.maxScrollExtent);
+              await Future.delayed(const Duration(milliseconds: 0));
+              ScreenWidget.scrollController.value
+                  .jumpTo(ScreenWidget.scrollController.value.position.pixels);
               ScreenWidget.focus.value.unfocus();
-              await Future.delayed(Duration(milliseconds: 0));
+              await Future.delayed(const Duration(milliseconds: 0));
               ScreenWidget.focus.value.requestFocus();
             },
             child: Text(
+
               buttonText,
               style: const TextStyle(fontSize: 35, color: Colors.white),
             )));
@@ -45,12 +46,9 @@ Widget buildButton(String buttonText, String buttonType) {
                           ScreenWidget.input.value.selection.extentOffset);
                   ScreenWidget.input.value.text =
                       '$textBeforeCursor.$textAfterCursor';
-                  await Future.delayed(const Duration(milliseconds: 0));
-                  ScreenWidget.scrollController.value.jumpTo(ScreenWidget
-                      .scrollController.value.position.maxScrollExtent);
-                  ScreenWidget.focus.value.unfocus();
-                  await Future.delayed(const Duration(milliseconds: 0));
-                  ScreenWidget.focus.value.requestFocus();
+                  cursorPosition = textBeforeCursor.length + 1;
+                  ScreenWidget.input.value.selection =
+                      TextSelection.collapsed(offset: cursorPosition);
                 } else {
                   textBeforeCursor =
                       '${ScreenWidget.input.value.text.substring(0, ScreenWidget.input.value.selection.baseOffset)}0';
@@ -59,13 +57,15 @@ Widget buildButton(String buttonText, String buttonType) {
                           ScreenWidget.input.value.selection.extentOffset);
                   ScreenWidget.input.value.text =
                       '$textBeforeCursor.$textAfterCursor';
-                  await Future.delayed(Duration(milliseconds: 0));
-                  ScreenWidget.scrollController.value.jumpTo(ScreenWidget
-                      .scrollController.value.position.maxScrollExtent);
-                  ScreenWidget.focus.value.unfocus();
-                  await Future.delayed(Duration(milliseconds: 0));
-                  ScreenWidget.focus.value.requestFocus();
+                  cursorPosition = textBeforeCursor.length + 1;
+                  ScreenWidget.input.value.selection =
+                      TextSelection.collapsed(offset: cursorPosition);
                 }
+                await Future.delayed(const Duration(milliseconds: 0));
+                ScreenWidget.scrollController.value.jumpTo(
+                    ScreenWidget.scrollController.value.position.pixels);
+                ScreenWidget.focus.value.unfocus();
+                await Future.delayed(const Duration(milliseconds: 0));
                 ScreenWidget.focus.value.requestFocus();
               }
               setAnswer();
@@ -86,24 +86,26 @@ Widget buildButton(String buttonText, String buttonType) {
                   ScreenWidget.input.value.text =
                       '$textBeforeCursor%$textAfterCursor';
                   cursorPosition = textBeforeCursor.length + 1;
-                  await Future.delayed(Duration(milliseconds: 0));
-                  ScreenWidget.scrollController.value.jumpTo(ScreenWidget
-                      .scrollController.value.position.maxScrollExtent);
-                  ScreenWidget.focus.value.unfocus();
-                  await Future.delayed(Duration(milliseconds: 0));
-                  ScreenWidget.focus.value.requestFocus();
+                  ScreenWidget.input.value.selection =
+                      TextSelection.collapsed(offset: cursorPosition);
                   ScreenWidget.focus.value.requestFocus();
                 }
                 setAnswer();
+                await Future.delayed(const Duration(milliseconds: 0));
+                ScreenWidget.scrollController.value.jumpTo(
+                    ScreenWidget.scrollController.value.position.pixels);
+                ScreenWidget.focus.value.unfocus();
+                await Future.delayed(const Duration(milliseconds: 0));
+                ScreenWidget.focus.value.requestFocus();
               },
               child: const Text(
                 "%",
                 style: TextStyle(fontSize: 35, color: Colors.white),
               )));
-    } else if (buttonText == "-") {
+    } else if (buttonText == '–') {
       return Expanded(
         child: TextButton(
-            onPressed: () {
+            onPressed: () async {
               if (ScreenWidget.input.value.text != "") {
                 textBeforeCursor = ScreenWidget.input.value.text.substring(
                     0, ScreenWidget.input.value.selection.baseOffset);
@@ -131,16 +133,22 @@ Widget buildButton(String buttonText, String buttonType) {
                 ScreenWidget.focus.value.requestFocus();
               }
               setAnswer();
+              await Future.delayed(const Duration(milliseconds: 0));
+              ScreenWidget.scrollController.value
+                  .jumpTo(ScreenWidget.scrollController.value.position.pixels);
+              ScreenWidget.focus.value.unfocus();
+              await Future.delayed(const Duration(milliseconds: 0));
+              ScreenWidget.focus.value.requestFocus();
             },
             child: const Text("–",
                 style: TextStyle(
-                  fontSize: 45,
+                  fontSize: 45, color:  Color(0xffcb5cf4)
                 ))),
       );
     } else if (buttonText == '⌫') {
       return Expanded(
         child: TextButton(
-            onPressed: () async {
+            onPressed: () {
               if (ScreenWidget.input.value.text.isNotEmpty) {
                 String textBeforeCursor = ScreenWidget.input.value.text
                     .substring(
@@ -159,44 +167,44 @@ Widget buildButton(String buttonText, String buttonType) {
                   ScreenWidget.input.value.text = ScreenWidget.input.value.text
                           .substring(0, cursorPosition) +
                       textAfterCursor;
-                  await Future.delayed(Duration(milliseconds: 0));
-                  ScreenWidget.scrollController.value.jumpTo(ScreenWidget
-                      .scrollController.value.position.maxScrollExtent);
-                  ScreenWidget.focus.value.unfocus();
-                  await Future.delayed(Duration(milliseconds: 0));
-                  setAnswer();
+                  ScreenWidget.input.value.selection =
+                      TextSelection.collapsed(offset: cursorPosition);
                   ScreenWidget.focus.value.requestFocus();
                 }
               }
-            },
-            onLongPress: () async {
-              ScreenWidget.input.value.text = '';
-              await Future.delayed(Duration(milliseconds: 0));
-              ScreenWidget.scrollController.value.jumpTo(
-                  ScreenWidget.scrollController.value.position.maxScrollExtent);
-              ScreenWidget.focus.value.unfocus();
-              await Future.delayed(Duration(milliseconds: 0));
+
+              setAnswer();
               ScreenWidget.focus.value.requestFocus();
+            },
+            onLongPress: () {
+              ScreenWidget.input.value.text = "";
+              ScreenWidget.ans.value = '';
             },
             child: const Text("⌫",
                 style: TextStyle(
-                  fontSize: 30,
+                  fontSize: 30, color:  Color(0xffcb5cf4)
                 ))),
       );
     } else if (buttonText == '=') {
       return SizedBox(
-        height: 130,
+        height: 150,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: TextButton(
-              onPressed: () {
-                ScreenWidget.input.value.text = ScreenWidget.ans.value;
-                setAnswer();
+              onPressed: () async {
+                if (ScreenWidget.ans.value.isNotEmpty) {
+                  ScreenWidget.input.value.text = ScreenWidget.ans.value;
+                }
+                await Future.delayed(const Duration(milliseconds: 0));
+                ScreenWidget.scrollController.value.jumpTo(
+                    ScreenWidget.scrollController.value.position.pixels);
+                ScreenWidget.focus.value.unfocus();
+                await Future.delayed(const Duration(milliseconds: 0));
                 ScreenWidget.focus.value.requestFocus();
               },
               style: TextButton.styleFrom(
                 foregroundColor: Colors.white,
-                backgroundColor: Colors.purple,
+                backgroundColor: const Color(0xffcb5cf4),
                 shape: ContinuousRectangleBorder(
                     borderRadius: BorderRadius.circular(20)),
               ),
@@ -211,36 +219,38 @@ Widget buildButton(String buttonText, String buttonType) {
     } else {
       return Expanded(
           child: TextButton(
-              onPressed: () {
+              onPressed: () async {
                 if (ScreenWidget.input.value.text.isNotEmpty) {
                   setSymbol(buttonText);
                 }
+                await Future.delayed(const Duration(milliseconds: 0));
+                ScreenWidget.scrollController.value.jumpTo(
+                    ScreenWidget.scrollController.value.position.pixels);
+                ScreenWidget.focus.value.unfocus();
+                await Future.delayed(const Duration(milliseconds: 0));
+                ScreenWidget.focus.value.requestFocus();
+                setAnswer();
               },
               child: Text(buttonText,
                   style: const TextStyle(
-                    fontSize: 50,
+                    fontSize: 50, color:  Color(0xffcb5cf4)
                   ))));
     }
   }
   return Expanded(
       child: TextButton(
-    onPressed: () async {
-      ScreenWidget.input.value.text = '';
-      await Future.delayed(Duration(milliseconds: 0));
-      ScreenWidget.scrollController.value
-          .jumpTo(ScreenWidget.scrollController.value.position.maxScrollExtent);
-      ScreenWidget.focus.value.unfocus();
-      await Future.delayed(Duration(milliseconds: 0));
-      ScreenWidget.focus.value.requestFocus();
-    },
-    child: Text(
-      buttonText,
-      style: const TextStyle(
-        fontSize: 35,
-      ),
-    ),
-  ));
-}
+        onPressed: () {
+          ScreenWidget.input.value.text = "";
+          ScreenWidget.focus.value.requestFocus();
+          ScreenWidget.ans.value = '';
+        },
+        child: Text(
+          buttonText,
+          style: const TextStyle(
+            fontSize: 35, color: Color(0xffcb5cf4)
+          ),
+        ),
+      ));}
 
 bool searchFunction(String myString, String searchValue) {
   if (myString == searchValue) {
@@ -256,57 +266,41 @@ bool searchFunction(String myString, String searchValue) {
   return count == searchFor.length;
 }
 
-Future<void> set(String s) async {
+void set(String s) {
   if (ScreenWidget.input.value.text == "") {
     ScreenWidget.input.value.text = s;
-    ScreenWidget.focus.value.requestFocus();
   } else {
-    ScreenWidget.focus.value.requestFocus();
     textBeforeCursor = ScreenWidget.input.value.text
         .substring(0, ScreenWidget.input.value.selection.baseOffset);
-
     String textAfterCursor = ScreenWidget.input.value.text
         .substring(ScreenWidget.input.value.selection.extentOffset);
     ScreenWidget.input.value.text = textBeforeCursor + s + textAfterCursor;
     cursorPosition = textBeforeCursor.length + 1;
-    await Future.delayed(Duration(milliseconds: 0));
-    ScreenWidget.scrollController.value
-        .jumpTo(ScreenWidget.scrollController.value.position.maxScrollExtent);
-    ScreenWidget.focus.value.unfocus();
-    await Future.delayed(Duration(milliseconds: 0));
-    ScreenWidget.focus.value.requestFocus();
+    ScreenWidget.input.value.selection =
+        TextSelection.collapsed(offset: cursorPosition);
   }
-  ScreenWidget.focus.value.requestFocus();
 }
 
-Future<void> setSymbol(String s) async {
+void setSymbol(String s) {
   if (ScreenWidget.input.value.text[0] == '–') {
-    ScreenWidget.input.value.text = ScreenWidget.input.value.text
-        .substring(1, ScreenWidget.input.value.text.length);
+    ScreenWidget.input.value.text = ScreenWidget.input.value.text.substring(1, ScreenWidget.input.value.text.length);
   } else if (ScreenWidget.input.value.text.isNotEmpty) {
-    textBeforeCursor = ScreenWidget.input.value.text
-        .substring(0, ScreenWidget.input.value.selection.baseOffset);
-    while (textBeforeCursor[textBeforeCursor.length - 1] == '÷' ||
+    textBeforeCursor = ScreenWidget.input.value.text.substring(0, ScreenWidget.input.value.selection.baseOffset);
+    while(textBeforeCursor[textBeforeCursor.length - 1] == '÷' ||
         textBeforeCursor[textBeforeCursor.length - 1] == '×' ||
         textBeforeCursor[textBeforeCursor.length - 1] == '–' ||
-        textBeforeCursor[textBeforeCursor.length - 1] == '+') {
+        textBeforeCursor[textBeforeCursor.length - 1] == '+'){
       textBeforeCursor =
           textBeforeCursor.substring(0, textBeforeCursor.length - 1);
     }
-    textAfterCursor = ScreenWidget.input.value.text
-        .substring(ScreenWidget.input.value.selection.extentOffset);
+    textAfterCursor = ScreenWidget.input.value.text.substring(ScreenWidget.input.value.selection.extentOffset);
     ScreenWidget.input.value.text = textBeforeCursor + s + textAfterCursor;
     cursorPosition = textBeforeCursor.length + 1;
-    await Future.delayed(Duration(milliseconds: 0));
-    ScreenWidget.scrollController.value
-        .jumpTo(ScreenWidget.scrollController.value.position.maxScrollExtent);
-    ScreenWidget.focus.value.unfocus();
-    await Future.delayed(Duration(milliseconds: 0));
-    ScreenWidget.focus.value.requestFocus();
+    ScreenWidget.input.value.selection = TextSelection.collapsed(offset: cursorPosition);
   }
   ScreenWidget.focus.value.requestFocus();
-}
 
+}
 void setAnswer() {
   expression = ScreenWidget.input.value.text;
   expression = expression.replaceAll('×', '*');
