@@ -1,9 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.upware.simple_calculator">
    <application
-        android:label="simple_calculator"
-        android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+       android:name="${applicationName}"
+       android:icon="@mipmap/ic_launcher"
+       android:label="Simple Calculator">
         <activity
             android:name=".MainActivity"
             android:exported="true"
