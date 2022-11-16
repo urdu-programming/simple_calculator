@@ -5,7 +5,7 @@ import 'package:simple_calculator/widgets/screen_widget.dart';
 String expression = "";
 late String textBeforeCursor;
 late String textAfterCursor;
-late int cursorPosition;
+int cursorPosition = ScreenWidget.input.value.selection.baseOffset;
 FocusNode myFocusNode = FocusNode();
 
 Widget buildButton(String buttonText, String buttonType) {
@@ -23,7 +23,6 @@ Widget buildButton(String buttonText, String buttonType) {
               ScreenWidget.focus.value.requestFocus();
             },
             child: Text(
-
               buttonText,
               style: const TextStyle(fontSize: 35, color: Colors.white),
             )));
@@ -31,9 +30,10 @@ Widget buildButton(String buttonText, String buttonType) {
     return Expanded(
         child: TextButton(
             onPressed: () async {
-              textBeforeCursor = ScreenWidget.input.value.text
-                  .substring(0, ScreenWidget.input.value.selection.baseOffset);
-              if (!searchFunction(ScreenWidget.input.value.text, '.')) {
+              ScreenWidget.focus.value.requestFocus();
+
+              if (checkPoint(ScreenWidget.input.value.text)) {
+                ScreenWidget.focus.value.requestFocus();
                 if (ScreenWidget.input.value.text != "" &&
                     textBeforeCursor[textBeforeCursor.length - 1] != '÷' &&
                     textBeforeCursor[textBeforeCursor.length - 1] != '×' &&
@@ -41,17 +41,6 @@ Widget buildButton(String buttonText, String buttonType) {
                     textBeforeCursor[textBeforeCursor.length - 1] != '+') {
                   textBeforeCursor = ScreenWidget.input.value.text.substring(
                       0, ScreenWidget.input.value.selection.baseOffset);
-                  String textAfterCursor = ScreenWidget.input.value.text
-                      .substring(
-                          ScreenWidget.input.value.selection.extentOffset);
-                  ScreenWidget.input.value.text =
-                      '$textBeforeCursor.$textAfterCursor';
-                  cursorPosition = textBeforeCursor.length + 1;
-                  ScreenWidget.input.value.selection =
-                      TextSelection.collapsed(offset: cursorPosition);
-                } else {
-                  textBeforeCursor =
-                      '${ScreenWidget.input.value.text.substring(0, ScreenWidget.input.value.selection.baseOffset)}0';
                   String textAfterCursor = ScreenWidget.input.value.text
                       .substring(
                           ScreenWidget.input.value.selection.extentOffset);
@@ -141,9 +130,7 @@ Widget buildButton(String buttonText, String buttonType) {
               ScreenWidget.focus.value.requestFocus();
             },
             child: const Text("–",
-                style: TextStyle(
-                  fontSize: 45, color:  Color(0xffcb5cf4)
-                ))),
+                style: TextStyle(fontSize: 45, color: Color(0xffcb5cf4)))),
       );
     } else if (buttonText == '⌫') {
       return Expanded(
@@ -181,9 +168,7 @@ Widget buildButton(String buttonText, String buttonType) {
               ScreenWidget.ans.value = '';
             },
             child: const Text("⌫",
-                style: TextStyle(
-                  fontSize: 30, color:  Color(0xffcb5cf4)
-                ))),
+                style: TextStyle(fontSize: 30, color: Color(0xffcb5cf4)))),
       );
     } else if (buttonText == '=') {
       return SizedBox(
@@ -233,24 +218,22 @@ Widget buildButton(String buttonText, String buttonType) {
               },
               child: Text(buttonText,
                   style: const TextStyle(
-                    fontSize: 50, color:  Color(0xffcb5cf4)
-                  ))));
+                      fontSize: 50, color: Color(0xffcb5cf4)))));
     }
   }
   return Expanded(
       child: TextButton(
-        onPressed: () {
-          ScreenWidget.input.value.text = "";
-          ScreenWidget.focus.value.requestFocus();
-          ScreenWidget.ans.value = '';
-        },
-        child: Text(
-          buttonText,
-          style: const TextStyle(
-            fontSize: 35, color: Color(0xffcb5cf4)
-          ),
-        ),
-      ));}
+    onPressed: () {
+      ScreenWidget.input.value.text = "";
+      ScreenWidget.focus.value.requestFocus();
+      ScreenWidget.ans.value = '';
+    },
+    child: Text(
+      buttonText,
+      style: const TextStyle(fontSize: 35, color: Color(0xffcb5cf4)),
+    ),
+  ));
+}
 
 bool searchFunction(String myString, String searchValue) {
   if (myString == searchValue) {
@@ -283,24 +266,28 @@ void set(String s) {
 
 void setSymbol(String s) {
   if (ScreenWidget.input.value.text[0] == '–') {
-    ScreenWidget.input.value.text = ScreenWidget.input.value.text.substring(1, ScreenWidget.input.value.text.length);
+    ScreenWidget.input.value.text = ScreenWidget.input.value.text
+        .substring(1, ScreenWidget.input.value.text.length);
   } else if (ScreenWidget.input.value.text.isNotEmpty) {
-    textBeforeCursor = ScreenWidget.input.value.text.substring(0, ScreenWidget.input.value.selection.baseOffset);
-    while(textBeforeCursor[textBeforeCursor.length - 1] == '÷' ||
+    textBeforeCursor = ScreenWidget.input.value.text
+        .substring(0, ScreenWidget.input.value.selection.baseOffset);
+    while (textBeforeCursor[textBeforeCursor.length - 1] == '÷' ||
         textBeforeCursor[textBeforeCursor.length - 1] == '×' ||
         textBeforeCursor[textBeforeCursor.length - 1] == '–' ||
-        textBeforeCursor[textBeforeCursor.length - 1] == '+'){
+        textBeforeCursor[textBeforeCursor.length - 1] == '+') {
       textBeforeCursor =
           textBeforeCursor.substring(0, textBeforeCursor.length - 1);
     }
-    textAfterCursor = ScreenWidget.input.value.text.substring(ScreenWidget.input.value.selection.extentOffset);
+    textAfterCursor = ScreenWidget.input.value.text
+        .substring(ScreenWidget.input.value.selection.extentOffset);
     ScreenWidget.input.value.text = textBeforeCursor + s + textAfterCursor;
     cursorPosition = textBeforeCursor.length + 1;
-    ScreenWidget.input.value.selection = TextSelection.collapsed(offset: cursorPosition);
+    ScreenWidget.input.value.selection =
+        TextSelection.collapsed(offset: cursorPosition);
   }
   ScreenWidget.focus.value.requestFocus();
-
 }
+
 void setAnswer() {
   expression = ScreenWidget.input.value.text;
   expression = expression.replaceAll('×', '*');
@@ -323,4 +310,67 @@ void setAnswer() {
   } catch (e) {
     ScreenWidget.ans.value = '';
   }
+}
+
+bool checkPoint(String num) {
+  int initial = ScreenWidget.input.value.selection.baseOffset - 1;
+  var start = 0;
+  var word = '';
+  if (initial >= 0) {
+    if (num[initial] == '.') {
+      return false;
+    } else if (num.codeUnitAt(initial) >= 48 && num.codeUnitAt(initial) <= 57) {
+      while (num.codeUnitAt(initial) >= 48 && num.codeUnitAt(initial) <= 57) {
+        start = initial;
+        initial--;
+        if (initial < 0) {
+          break;
+        }
+        if (num[initial] == '.') {
+          return false;
+        }
+      }
+      while ((num.codeUnitAt(start) >= 48 && num.codeUnitAt(start) <= 57) ||
+          num[start] == '.') {
+        word = '$word${num[start]}';
+        start++;
+        if (start > num.length - 1) {
+          break;
+        }
+      }
+    } else {
+      start = initial + 1;
+      try {
+        while ((num.codeUnitAt(start) >= 48 && num.codeUnitAt(start) <= 57) ||
+            num[start] == '.') {
+          word = '$word${num[start]}';
+          start++;
+          if (start > num.length - 1) {
+            break;
+          }
+        }
+      } catch (e) {
+        set('0');
+        set('.');
+        return false;
+      }
+    }
+  } else if (ScreenWidget.input.value.text.isNotEmpty) {
+    for (int i = 0; i < num.length; i++) {
+      if (num[i] == '.') {
+        return false;
+      }
+    }
+    set('0');
+    set('.');
+    return false;
+  }
+  else{
+    set('0.');
+    return false;
+  }
+  if (!searchFunction(word, '.')) {
+    return true;
+  }
+  return false;
 }

@@ -1,6 +1,6 @@
-
 import 'package:auto_size_text_field/auto_size_text_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class ScreenWidget extends StatelessWidget {
   const ScreenWidget({Key? key}) : super(key: key);
@@ -18,16 +18,15 @@ class ScreenWidget extends StatelessWidget {
         color: Color(0xff303142),
         child: Column(
           children: [
-            Container(
-              margin: const EdgeInsets.only(top: 150),
+            Expanded(
               child: ValueListenableBuilder(
                 valueListenable: scrollController,
                 builder: (BuildContext context,
                     ScrollController scrollController, Widget) {
                   return ValueListenableBuilder(
                     valueListenable: focus,
-                    builder:
-                        (BuildContext context, FocusNode myFocusNode, Widget) {
+                    builder: (BuildContext context, FocusNode myFocusNode,
+                        Widget) {
                       return ValueListenableBuilder(
                         valueListenable: input,
                         builder: (BuildContext context,
@@ -58,19 +57,21 @@ class ScreenWidget extends StatelessWidget {
                 },
               ),
             ),
-            Container(
-                padding: const EdgeInsets.only(right: 10),
-                width: MediaQuery.of(context).size.width,
-                child: ValueListenableBuilder(
-                    valueListenable: ans,
-                    builder: (BuildContext context, String answer, Widget) {
-                      return Text(
-                        answer,
-                        textAlign: TextAlign.right,
-                        style:
-                            const TextStyle(fontSize: 40, color: Colors.grey),
-                      );
-                    }))
+            Expanded(
+              child: Container(
+                  padding: const EdgeInsets.only(right: 10),
+                  width: MediaQuery.of(context).size.width,
+                  child: ValueListenableBuilder(
+                      valueListenable: ans,
+                      builder: (BuildContext context, String answer, Widget) {
+                        return Text(
+                          answer,
+                          textAlign: TextAlign.right,
+                          style:
+                              const TextStyle(fontSize: 40, color: Colors.grey),
+                        );
+                      })),
+            )
           ],
         ),
       ),
