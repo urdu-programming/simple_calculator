@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:math_expressions/math_expressions.dart';
 import 'package:simple_calculator/widgets/screen_widget.dart';
@@ -58,40 +59,11 @@ Widget buildButton(String buttonText, String buttonType) {
                 ScreenWidget.focus.value.requestFocus();
               }
               setAnswer();
-              ScreenWidget.focus.value.requestFocus();
             },
             child: const Text(".",
                 style: TextStyle(fontSize: 35, color: Colors.white))));
   } else if (buttonType == 'operation') {
-    if (buttonText == '%') {
-      return Expanded(
-          child: TextButton(
-              onPressed: () async {
-                if (ScreenWidget.input.value.text != "") {
-                  textBeforeCursor = ScreenWidget.input.value.text.substring(
-                      0, ScreenWidget.input.value.selection.baseOffset);
-                  textAfterCursor = ScreenWidget.input.value.text.substring(
-                      ScreenWidget.input.value.selection.extentOffset);
-                  ScreenWidget.input.value.text =
-                      '$textBeforeCursor%$textAfterCursor';
-                  cursorPosition = textBeforeCursor.length + 1;
-                  ScreenWidget.input.value.selection =
-                      TextSelection.collapsed(offset: cursorPosition);
-                  ScreenWidget.focus.value.requestFocus();
-                }
-                setAnswer();
-                await Future.delayed(const Duration(milliseconds: 0));
-                ScreenWidget.scrollController.value.jumpTo(
-                    ScreenWidget.scrollController.value.position.pixels);
-                ScreenWidget.focus.value.unfocus();
-                await Future.delayed(const Duration(milliseconds: 0));
-                ScreenWidget.focus.value.requestFocus();
-              },
-              child: const Text(
-                "%",
-                style: TextStyle(fontSize: 35, color: Colors.white),
-              )));
-    } else if (buttonText == '–') {
+    if (buttonText == '–') {
       return Expanded(
         child: TextButton(
             onPressed: () async {
@@ -110,7 +82,6 @@ Widget buildButton(String buttonText, String buttonType) {
                 cursorPosition = textBeforeCursor.length + 1;
                 ScreenWidget.input.value.selection =
                     TextSelection.collapsed(offset: cursorPosition);
-                ScreenWidget.focus.value.requestFocus();
               } else {
                 cursorPosition = 1;
                 ScreenWidget.input.value.text += "–";
@@ -119,7 +90,6 @@ Widget buildButton(String buttonText, String buttonType) {
 
                 ScreenWidget.input.value.selection =
                     TextSelection.collapsed(offset: cursorPosition);
-                ScreenWidget.focus.value.requestFocus();
               }
               setAnswer();
               await Future.delayed(const Duration(milliseconds: 0));
@@ -143,7 +113,6 @@ Widget buildButton(String buttonText, String buttonType) {
                 cursorPosition = ScreenWidget.input.value.selection.baseOffset;
                 ScreenWidget.input.value.selection =
                     TextSelection.collapsed(offset: cursorPosition);
-                ScreenWidget.focus.value.requestFocus();
 
                 if (ScreenWidget.input.value.text != "" &&
                     textBeforeCursor != "") {
@@ -156,7 +125,6 @@ Widget buildButton(String buttonText, String buttonType) {
                       textAfterCursor;
                   ScreenWidget.input.value.selection =
                       TextSelection.collapsed(offset: cursorPosition);
-                  ScreenWidget.focus.value.requestFocus();
                 }
               }
 
@@ -171,37 +139,70 @@ Widget buildButton(String buttonText, String buttonType) {
                 style: TextStyle(fontSize: 30, color: Color(0xffcb5cf4)))),
       );
     } else if (buttonText == '=') {
-      return SizedBox(
-        height: 150,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
+      return Expanded(
+        child: TextButton(
+            onPressed: () async {
+              if (ScreenWidget.ans.value.isNotEmpty) {
+                ScreenWidget.input.value.text = ScreenWidget.ans.value;
+              }
+              await Future.delayed(const Duration(milliseconds: 0));
+              ScreenWidget.scrollController.value.jumpTo(
+                  ScreenWidget.scrollController.value.position.pixels);
+              ScreenWidget.focus.value.unfocus();
+              await Future.delayed(const Duration(milliseconds: 0));
+              ScreenWidget.focus.value.requestFocus();
+            },
+            style: TextButton.styleFrom(
+              foregroundColor: Colors.white,
+              backgroundColor: const Color(0xffcb5cf4),
+              shape: ContinuousRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+            ),
+            child: const Text(
+              "=",
+              style: TextStyle(
+                fontSize: 35,
+              ),
+            ))
+        );
+    }
+    else if(buttonText == '('){
+      return Expanded(
           child: TextButton(
               onPressed: () async {
-                if (ScreenWidget.ans.value.isNotEmpty) {
-                  ScreenWidget.input.value.text = ScreenWidget.ans.value;
-                }
+                set(buttonText);
+                setAnswer();
                 await Future.delayed(const Duration(milliseconds: 0));
-                ScreenWidget.scrollController.value.jumpTo(
-                    ScreenWidget.scrollController.value.position.pixels);
+                ScreenWidget.scrollController.value
+                    .jumpTo(ScreenWidget.scrollController.value.position.pixels);
                 ScreenWidget.focus.value.unfocus();
                 await Future.delayed(const Duration(milliseconds: 0));
                 ScreenWidget.focus.value.requestFocus();
               },
-              style: TextButton.styleFrom(
-                foregroundColor: Colors.white,
-                backgroundColor: const Color(0xffcb5cf4),
-                shape: ContinuousRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)),
-              ),
-              child: const Text(
-                "=",
-                style: TextStyle(
-                  fontSize: 35,
-                ),
-              )),
-        ),
-      );
-    } else {
+              child: Text(
+                buttonText,
+                style: const TextStyle(fontSize: 35, color: Colors.yellow),
+              )));
+    }
+    else if(buttonText == ')'){
+      return Expanded(
+          child: TextButton(
+              onPressed: () async {
+                set(buttonText);
+                await Future.delayed(const Duration(milliseconds: 0));
+                ScreenWidget.scrollController.value
+                    .jumpTo(ScreenWidget.scrollController.value.position.pixels);
+                ScreenWidget.focus.value.unfocus();
+                await Future.delayed(const Duration(milliseconds: 0));
+                ScreenWidget.focus.value.requestFocus();
+                setAnswer();
+              },
+              child: Text(
+                buttonText,
+                style: const TextStyle(fontSize: 35, color: Colors.yellow),
+              )));
+    }
+    else {
       return Expanded(
           child: TextButton(
               onPressed: () async {
@@ -364,8 +365,7 @@ bool checkPoint(String num) {
     set('0');
     set('.');
     return false;
-  }
-  else{
+  } else {
     set('0.');
     return false;
   }

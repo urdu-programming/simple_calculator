@@ -15,7 +15,7 @@ class ScreenWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: Container(
-        color: Color(0xff303142),
+        color: const Color(0xff303142),
         child: Column(
           children: [
             Expanded(
@@ -32,9 +32,11 @@ class ScreenWidget extends StatelessWidget {
                         builder: (BuildContext context,
                             TextEditingController number, Widget) {
                           return Container(
+                            alignment: Alignment.center,
+                            margin: EdgeInsets.only(top: 130),
                             child: AutoSizeTextField(
                               controller: number,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   color: Colors.white, fontSize: 70),
                               minFontSize: 40,
                               stepGranularity: 10,
@@ -57,21 +59,19 @@ class ScreenWidget extends StatelessWidget {
                 },
               ),
             ),
-            Expanded(
-              child: Container(
-                  padding: const EdgeInsets.only(right: 10),
-                  width: MediaQuery.of(context).size.width,
-                  child: ValueListenableBuilder(
-                      valueListenable: ans,
-                      builder: (BuildContext context, String answer, Widget) {
-                        return Text(
-                          answer,
-                          textAlign: TextAlign.right,
-                          style:
-                              const TextStyle(fontSize: 40, color: Colors.grey),
-                        );
-                      })),
-            )
+            Container(
+                padding: const EdgeInsets.only(right: 10, bottom: 50),
+                width: MediaQuery.of(context).size.width,
+                child: ValueListenableBuilder(
+                    valueListenable: ans,
+                    builder: (BuildContext context, String answer, Widget) {
+                      return Text(
+                        answer,
+                        textAlign: TextAlign.right,
+                        style:
+                            const TextStyle(fontSize: 40, color: Colors.grey),
+                      );
+                    }))
           ],
         ),
       ),

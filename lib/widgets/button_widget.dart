@@ -15,10 +15,11 @@ class ButtonWidget extends StatelessWidget {
             child: Column(
               children: [
                 buildButton('C', ''),
-                buildButton('7', 'number'),
-                buildButton('4', 'number'),
-                buildButton('1', 'number'),
-                buildButton('%', 'operation'),
+                buildButton('8', 'number'),
+                buildButton('5', 'number'),
+                buildButton('2', 'number'),
+                buildButton('.', 'point')
+
               ],
             ),
           ),
@@ -26,9 +27,9 @@ class ButtonWidget extends StatelessWidget {
             child: Column(
               children: [
                 buildButton('÷', 'operation'),
-                buildButton('8', 'number'),
-                buildButton('5', 'number'),
-                buildButton('2', 'number'),
+                buildButton('9', 'number'),
+                buildButton('6', 'number'),
+                buildButton('3', 'number'),
                 buildButton('0', 'number'),
               ],
             ),
@@ -37,10 +38,10 @@ class ButtonWidget extends StatelessWidget {
             child: Column(
               children: [
                 buildButton('×', 'operation'),
-                buildButton('9', 'number'),
-                buildButton('6', 'number'),
-                buildButton('3', 'number'),
-                buildButton('.', 'point')
+                buildButton('(', 'operation'),
+                buildButton('7', 'number'),
+                buildButton('4', 'number'),
+                buildButton('1', 'number'),
               ],
             ),
           ),
@@ -48,6 +49,7 @@ class ButtonWidget extends StatelessWidget {
             child: Column(
               children: [
                 buildButton('⌫', 'operation'),
+                buildButton(')', 'operation'),
                 buildButton('–', 'operation'),
                 buildButton('+', 'operation'),
                 buildButton('=', 'operation'),
